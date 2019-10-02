@@ -12,7 +12,7 @@ router.get('/', function (req, res, next) {
 /* GET Test Kafka Message Production. */
 router.get('/kafka-test/cyan/:message', function (req, res, next) {
 
-    kafkaProduceMessage('s3-upload-topic', {
+    kafkaProduceMessage(process.env.KAFKA_TOPIC_NAME, {
         type: 'TEST',
         action: 'PAINT_MESSAGE_CYAN',
         params: {
@@ -38,7 +38,7 @@ router.get('/kafka-test/cyan/:message', function (req, res, next) {
 /* GET Test Kafka Message Production. */
 router.get('/kafka-test/green/:message', function (req, res, next) {
 
-    kafkaProduceMessage('s3-upload-topic', {
+    kafkaProduceMessage(process.env.KAFKA_TOPIC_NAME, {
         type: 'TEST',
         action: 'PAINT_MESSAGE_GREEN',
         params: {
@@ -64,7 +64,7 @@ router.get('/kafka-test/green/:message', function (req, res, next) {
 /* GET Test Kafka Message Production. */
 router.get('/kafka-test/blue/:message', function (req, res, next) {
 
-    kafkaProduceMessage('s3-upload-topic', {
+    kafkaProduceMessage(process.env.KAFKA_TOPIC_NAME, {
         type: 'TEST',
         action: 'PAINT_MESSAGE_BLUE',
         params: {
