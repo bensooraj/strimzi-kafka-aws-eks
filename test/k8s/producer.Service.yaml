@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: node-test-producer
+  name: node-test-producer
+spec:
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+  selector:
+    app: node-test-producer
+  type: LoadBalancer
+status:
+  loadBalancer: {}

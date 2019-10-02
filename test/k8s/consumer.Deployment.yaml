@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: node-test-consumer
+  name: node-test-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-test-consumer
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: node-test-consumer
+    spec:
+      containers:
+      - image: bensooraj/nodejs-strimzi-kafka-test-consumer:b3
+        name: nodejs-strimzi-kafka-test-consumer
+        envFrom:
+          - configMapRef:
+              name: kafka-client-config
+        resources: {}
+status: {}

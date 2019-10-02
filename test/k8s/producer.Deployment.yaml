@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: node-test-producer
+  name: node-test-producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-test-producer
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: node-test-producer
+    spec:
+      containers:
+      - image: bensooraj/nodejs-strimzi-kafka-test-producer:b3
+        name: nodejs-strimzi-kafka-test-producer
+        envFrom:
+          - configMapRef:
+              name: kafka-client-config
+        resources: {}
+status: {}
