@@ -1,0 +1,3 @@
+node_modules
+testKafkaProducer/node_modules
+testKafkaConsumer/node_modules
