@@ -38,6 +38,8 @@ router.get('/kafka-test/cyan/:message', function (req, res, next) {
 /* GET Test Kafka Message Production. */
 router.get('/kafka-test/green/:message', function (req, res, next) {
 
+    console.log("process.env.KAFKA_TOPIC_NAME: ", process.env.KAFKA_TOPIC_NAME)
+
     kafkaProduceMessage(process.env.KAFKA_TOPIC_NAME, {
         type: 'TEST',
         action: 'PAINT_MESSAGE_GREEN',

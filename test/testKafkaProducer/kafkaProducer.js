@@ -4,7 +4,7 @@ const kafka = require('kafka-node'),
 
     client = new kafka.KafkaClient({
         // A string of kafka broker/host combination delimited by comma
-        kafkaHost: `${process.env.KAFKA_BROKER_1}:9092`, // BROKER_HOST
+        kafkaHost: `${process.env.KAFKA_BROKER_1}:9092,${process.env.KAFKA_BROKER_2}:9092,${process.env.KAFKA_BROKER_2}:9092`, // BROKER_HOST
         // ms it takes to wait for a successful connection before moving to the next host default: 10000
         connectTimeout: "10000", // BROKER_CONNECT_TIMEOUT
         // ms for a kafka request to timeout default: 30000
