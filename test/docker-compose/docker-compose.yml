@@ -1,0 +1,26 @@
+version: '3.3'
+
+services:
+   # Node.JS Kafka Test Producer
+   nodejs-strimzi-kafka-test-producer:
+     image: nodejs-strimzi-kafka-test-producer:v1
+     ports:
+       - "3000:3000"
+     restart: always
+     environment:
+       KAFKA_BROKER_1: ${KAFKA_BROKER_1}
+       KAFKA_BROKER_2: ${KAFKA_BROKER_2}
+       KAFKA_BROKER_3: ${KAFKA_BROKER_3}
+   
+   # Node.JS Kafka Test Consumer
+   nodejs-strimzi-kafka-test-consumer:
+     image: nodejs-kafka-consumer-app:v1
+     restart: always
+     environment:
+       KAFKA_BROKER_1: ${KAFKA_BROKER_1}
+       KAFKA_BROKER_2: ${KAFKA_BROKER_2}
+       KAFKA_BROKER_3: ${KAFKA_BROKER_3}
+       KAFKA_TOPIC_NAME: ${KAFKA_TOPIC_NAME}
+       KAFKA_CONSUMER_GROUP_ID: ${KAFKA_CONSUMER_GROUP_ID}
+volumes:
+    db_data: {}
