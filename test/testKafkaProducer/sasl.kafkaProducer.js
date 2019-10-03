@@ -23,7 +23,6 @@ const producer = kafka.producer()
 
 const run = async () => {
     await producer.connect()
-    // setInterval(sendMessage, 3000)
 }
 
 run().catch(e => console.error(`[example/producer] ${e.message}`, e))
@@ -52,8 +51,6 @@ signalTraps.map(type => {
         }
     })
 })
-
-
 
 module.exports = {
     kafkaProducer: producer,
