@@ -1,43 +1,75 @@
-const kafka = require('kafka-node'),
-
-    HighLevelProducer = kafka.HighLevelProducer,
-
-    client = new kafka.KafkaClient({
-        // A string of kafka broker/host combination delimited by comma
-        kafkaHost: `${process.env.KAFKA_BROKER_1}:9092,${process.env.KAFKA_BROKER_2}:9092,${process.env.KAFKA_BROKER_2}:9092`, // BROKER_HOST
-        // ms it takes to wait for a successful connection before moving to the next host default: 10000
-        connectTimeout: "10000", // BROKER_CONNECT_TIMEOUT
-        // ms for a kafka request to timeout default: 30000
-        requestTimeout: "60000", // BROKER_REQUEST_TIMEOUT
-        // automatically connect when KafkaClient is instantiated otherwise you need to manually call connect default: true
-        autoConnect: true, // BROKER_AUTO_CONNECT
-        // maximum async operations at a time toward the kafka cluster. default: 10
-        maxAsyncRequests: 10, // BROKER_MAX_ASYNC_REQUESTS
-    }),
-
-    producer = new HighLevelProducer(client, {
-        // Configuration for when to consider a message as acknowledged, default 1
-        requireAcks: 1, // PRODUCER_REQUIRE_ACKS
-        // The amount of time in milliseconds to wait for all acks before considered, default 100ms
-        ackTimeoutMs: 100, // PRODUCER_ACKS_TIMEOUT
-        // Partitioner type (default = 0, random = 1, cyclic = 2, keyed = 3, custom = 4), default 0
-        partitionerType: 2, // PRODUCER_PARTITONER_TYPE
-    });
-
-producer.on('ready', function () {
-    console.log("Kafka HighLevelProducer is ready!");
+if (
+    process.env.MODE === "dev"
+) {
+    require('dotenv').config({
+        path: '../../test/.env'
+    })
+}
+const { Kafka, CompressionTypes } = require('kafkajs');
+const kafka = new Kafka({
+    clientId: 'strimzi-node-producer',
+    brokers: [`${process.env.KAFKA_BROKER_1}:9094`, `${process.env.KAFKA_BROKER_2}:9094`, `${process.env.KAFKA_BROKER_3}:9094`],
+    authenticationTimeout: 10000,
+    connectionTimeout: 10000,
+    sasl: {
+        mechanism: 'scram-sha-256',
+        username: process.env.KAFKA_SASL_USERNAME,
+        password: process.env.KAFKA_SASL_PASSWORD
+    },
+    ssl: true
 });
 
-producer.on('error', function (err) {
-    console.log("Kafka HighLevelProducer Error: ", err);
-});
+const producer = kafka.producer()
+
+const run = async () => {
+    await producer.connect()
+    // setInterval(sendMessage, 3000)
+}
+
+run().catch(e => console.error(`[example/producer] ${e.message}`, e))
+
+const errorTypes = ['unhandledRejection', 'uncaughtException']
+const signalTraps = ['SIGTERM', 'SIGINT', 'SIGUSR2']
+
+errorTypes.map(type => {
+    process.on(type, async () => {
+        try {
+            console.log(`process.on ${type}`)
+            await producer.disconnect()
+            process.exit(0)
+        } catch (_) {
+            process.exit(1)
+        }
+    })
+})
+
+signalTraps.map(type => {
+    process.once(type, async () => {
+        try {
+            await producer.disconnect()
+        } finally {
+            process.kill(process.pid, type)
+        }
+    })
+})
+
+
 
 module.exports = {
     kafkaProducer: producer,
-    kafkaProduceMessage: (topic, messages, cb) => {
-        producer.send([{
-            topic,
-            messages: JSON.stringify(messages)
-        }], cb);
+    kafkaProduceMessage: async (topic, messages) => {
+        try {
+            const recordMetadata = await producer.send({
+                topic,
+                compression: CompressionTypes.GZIP,
+                messages: [
+                    { value: JSON.stringify(messages) }
+                ],
+            });
+            return recordMetadata;
+        } catch (error) {
+            console.log("Error producing Kafka message: ", error);
+            // throw new Error(error);
+        }
     }
 }
