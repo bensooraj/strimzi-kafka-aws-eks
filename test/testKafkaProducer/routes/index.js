@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+// const { kafkaProduceMessage } = require('../sasl.kafkaProducer');
 const { kafkaProduceMessage } = require('../kafkaProducer');
 
 /* GET home page. */
