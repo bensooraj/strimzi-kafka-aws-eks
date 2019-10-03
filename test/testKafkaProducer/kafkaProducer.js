@@ -8,22 +8,14 @@ if (
 const { Kafka, CompressionTypes } = require('kafkajs');
 const kafka = new Kafka({
     clientId: 'strimzi-node-producer',
-    brokers: [`${process.env.KAFKA_BROKER_1}:9094`, `${process.env.KAFKA_BROKER_2}:9094`, `${process.env.KAFKA_BROKER_3}:9094`],
-    authenticationTimeout: 10000,
-    connectionTimeout: 10000,
-    sasl: {
-        mechanism: 'scram-sha-256',
-        username: process.env.KAFKA_SASL_USERNAME,
-        password: process.env.KAFKA_SASL_PASSWORD
-    },
-    ssl: true
+    brokers: [`${process.env.KAFKA_BROKER_1}:9092`, `${process.env.KAFKA_BROKER_2}:9092`, `${process.env.KAFKA_BROKER_3}:9092`],
+    connectionTimeout: 10000
 });
 
 const producer = kafka.producer()
 
 const run = async () => {
     await producer.connect()
-    // setInterval(sendMessage, 3000)
 }
 
 run().catch(e => console.error(`[example/producer] ${e.message}`, e))
@@ -52,8 +44,6 @@ signalTraps.map(type => {
         }
     })
 })
-
-
 
 module.exports = {
     kafkaProducer: producer,

@@ -8,15 +8,8 @@ if (
 const { Kafka } = require('kafkajs');
 const kafka = new Kafka({
     clientId: 'strimzi-node-consumer',
-    brokers: [`${process.env.KAFKA_BROKER_1}:9094`, `${process.env.KAFKA_BROKER_2}:9094`, `${process.env.KAFKA_BROKER_3}:9094`],
-    authenticationTimeout: 10000,
-    connectionTimeout: 10000,
-    sasl: {
-        mechanism: 'scram-sha-256',
-        username: process.env.KAFKA_SASL_USERNAME,
-        password: process.env.KAFKA_SASL_PASSWORD
-    },
-    ssl: true
+    brokers: [`${process.env.KAFKA_BROKER_1}:9092`, `${process.env.KAFKA_BROKER_2}:9092`, `${process.env.KAFKA_BROKER_3}:9092`],
+    connectionTimeout: 10000
 });
 const topic = process.env.KAFKA_TOPIC_NAME;
 const consumer = kafka.consumer({ groupId: process.env.KAFKA_CONSUMER_GROUP_ID });
