@@ -16,7 +16,7 @@ spec:
         app: node-test-consumer
     spec:
       containers:
-      - image: bensooraj/nodejs-strimzi-kafka-test-consumer:b3
+      - image: bensooraj/nodejs-strimzi-kafka-test-consumer:3b.plain.v1
         name: nodejs-strimzi-kafka-test-consumer
         envFrom:
           - configMapRef:

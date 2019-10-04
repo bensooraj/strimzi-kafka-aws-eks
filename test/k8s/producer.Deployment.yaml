@@ -16,7 +16,7 @@ spec:
         app: node-test-producer
     spec:
       containers:
-      - image: bensooraj/nodejs-strimzi-kafka-test-producer:b3
+      - image: bensooraj/nodejs-strimzi-kafka-test-producer:3b.plain.v1
         name: nodejs-strimzi-kafka-test-producer
         envFrom:
           - configMapRef:
