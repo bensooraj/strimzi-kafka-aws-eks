@@ -5,7 +5,7 @@ metadata:
     app: node-test-consumer
   name: node-test-consumer
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: node-test-consumer
