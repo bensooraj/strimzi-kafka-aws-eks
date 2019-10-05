@@ -1,1 +1,1 @@
-Up And Running With Kafka On AWS EKS Using Strimzi
+[Up And Running With Kafka On AWS EKS Using Strimzi](https://dev.to/bensooraj/up-and-running-with-kafka-on-aws-eks-using-strimzi-25ga)
